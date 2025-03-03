@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // Import the async library
+import 'dart:async';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _showLoginDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User must fill the form
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Login'),
@@ -62,10 +62,10 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => MyHomePage(title: 'Flutter Demo Home Page')),
+                    MaterialPageRoute(builder: (context) => const LoadingPage()),
                   );
                 } else {
-                  // Show an error message if the fields are empty
+                  // error for if empty
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -104,6 +104,45 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: const Center(
         child: Text('Please login to continue'),
+      ),
+    );
+  }
+}
+
+class LoadingPage extends StatefulWidget {
+  const LoadingPage({super.key});
+
+  @override
+  State<LoadingPage> createState() => _LoadingPageState();
+}
+
+class _LoadingPageState extends State<LoadingPage> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToHomePage();
+  }
+
+  Future<void> _navigateToHomePage() async {
+    await Future.delayed(const Duration(seconds: 3));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text('Loading...'),
+          ],
+        ),
       ),
     );
   }
